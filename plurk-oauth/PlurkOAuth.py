@@ -1,5 +1,6 @@
 import oauth2 as oauth
 import urlparse
+from urllib import urlencode
 import httplib
 
 class PlurkOAuth:
@@ -36,7 +37,7 @@ class PlurkOAuth:
             verifier = self.get_verifier()
             self.get_access_token(verifier)
 
-    def request(self, url, params = None):
+    def request(self, url, params = None, data = None):
 
         # Setup
         client = oauth.Client(self.consumer)
@@ -46,8 +47,11 @@ class PlurkOAuth:
         req = self.__make_request__(self.baseURL + url, params)
 
         # Get Request Token
-        resp, content = client.request(self.baseURL + url, "POST", 
-                headers=req.to_header())
+        encodedContent = None
+        if data:
+            encodedContent = urlencode(data)
+        resp, content = client.request(self.baseURL + url, "POST",
+                headers=req.to_header(), body = encodedContent)
         if resp['status'] != '200':
             print content
             raise Exception("Invalid response %s." % resp['status'])
