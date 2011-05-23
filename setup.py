@@ -7,12 +7,12 @@ config = {
     'description': 'Plurk OAuth API',
     'author': 'Cheng-Lung Sung',
     'url': 'https://github.com/clsung/plurk-oauth',
-    'download_url': 'Where to download it.',
+    'download_url': 'http://pypi.python.org/pypi/plurk-oauth',
     'author_email': 'clsung@gmail.com',
-    'version': '0.1',
+    'version': '0.2',
     'install_requires': ['nose', 'oauth2', 'json', 'httplib', 'urlparse'],
     'packages': ['plurk-oauth'],
-    'scripts': ['bin/get_own_profile.py'],
+    'scripts': ['bin/get_own_profile.py', 'bin/post_to_plurk.py'],
     'name': 'plurk-oauth'
 }
 
