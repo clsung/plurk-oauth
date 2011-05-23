@@ -16,6 +16,7 @@ class PlurkAPI:
         return self._oauth.request(path, options)
 
 if __name__ == '__main__':
-    plurk = PlurkAPI('qybNeecuywIO', 'CkVuCnhbO3V8xf78HyxC7X25HMs6wbgi')
+    import os
+    plurk = PlurkAPI(os.environ["CONSUMERKEY"], os.environ["CONSUMERSECRET"])
 #    plurk.authorize('tqRtGMu7Btw9','SCjkkydnkWNA7gwwuZo7y9wshVlzl7Lr')
     print plurk.callAPI('/APP/Profile/getOwnProfile')
