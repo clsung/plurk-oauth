@@ -3,6 +3,10 @@ Plurk-OAuth
 
 Simple Wrapper of Plurk OAuth API
 
+About
+----
+Plurk-OAuth is a wrapper for [Plurk API 2.0 beta](http://www.plurk.com/API/2)
+You will need to [Sign Up](http://www.plurk.com/PlurkApp/register) for your own CUSTOMER TOKENs.
 
 Example with ACCESS_TOKEN
 ----
