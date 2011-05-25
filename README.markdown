@@ -10,10 +10,12 @@ You will need to [Sign Up](http://www.plurk.com/PlurkApp/register) for your own 
 
 API.keys
 ----
-You will need to save CONSUMER_KEY/CONSUMER_SECRET in API.keys, the
-format is JSON. The example is below:
-{"CONSUMER_SECRET": "<i>I_am_consumer_secret</i>", "ACCESS_TOKEN": "<i>your_access_token</i>", "ACCESS_TOKEN_SECRET": "<i>your_access_token_secret</i>", "CONSUMER_KEY": "<i>I_am_consumer_key</i>"}
+> You will need to save CONSUMER_KEY/CONSUMER_SECRET in API.keys, the
+> format is JSON. The example is below:
+>> {"CONSUMER_SECRET": "<i>I_am_consumer_secret</i>", "ACCESS_TOKEN": "<i>your_access_token</i>", "ACCESS_TOKEN_SECRET": "<i>your_access_token_secret</i>", "CONSUMER_KEY": "<i>I_am_consumer_key</i>"}
 
+> For the first time use, you can omit the ACCESS_TOKEN/ACCESS_TOKEN_SECRET
+> , after authorize(), they will be saved.
 Example with ACCESS_TOKEN
 ----
 ``` python
