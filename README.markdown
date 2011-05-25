@@ -11,8 +11,8 @@ You will need to [Sign Up](http://www.plurk.com/PlurkApp/register) for your own 
 API.keys
 ----
 You will need to save CONSUMER_KEY/CONSUMER_SECRET in API.keys, the
-format is JSON. The example is below: (Replace contents in <...>)
-{"CONSUMER_SECRET": "<SECERT>", "ACCESS_TOKEN": "<TOKEN>", "ACCESS_TOKEN_SECRET": "<TOKEN_SECRET>", "CONSUMER_KEY": "<KEY>"}
+format is JSON. The example is below:
+{"CONSUMER_SECRET": "<i>I_am_consumer_secret</i>", "ACCESS_TOKEN": "<i>your_access_token</i>", "ACCESS_TOKEN_SECRET": "<i>your_access_token_secret</i>", "CONSUMER_KEY": "<i>I_am_consumer_key</i>"}
 
 Example with ACCESS_TOKEN
 ----
