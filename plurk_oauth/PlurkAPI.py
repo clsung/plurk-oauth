@@ -13,7 +13,7 @@ class PlurkAPI:
     def callAPI(self, path, options = None):
         if not self._authorized:
             self._oauth.authorize()
-        return self._oauth.request(path, None, options)
+        return json.loads(self._oauth.request(path, None, options))
 
 if __name__ == '__main__':
     import os
