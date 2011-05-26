@@ -71,7 +71,7 @@ class PlurkOAuth:
         self.customer_secret = secret
         self.consumer = oauth.Consumer(self.customer_key, self.customer_secret)
 
-    def __make_request__(self, requestURL, param = None):
+    def _make_request(self, requestURL, param = None):
         request = oauth.Request.from_consumer_and_token(consumer=self.consumer,
             token=self.token, http_method='POST',
             http_url= requestURL, parameters = param,
