@@ -9,7 +9,7 @@ config = {
     'url': 'https://github.com/clsung/plurk-oauth',
     'download_url': 'http://pypi.python.org/pypi/plurk-oauth',
     'author_email': 'clsung@gmail.com',
-    'version': '0.3',
+    'version': '0.4',
     'install_requires': ['nose', 'oauth2', 'json', 'httplib', 'urlparse'],
     'packages': ['plurk_oauth'],
     'scripts': ['bin/get_own_profile.py', 'bin/post_to_plurk.py'],

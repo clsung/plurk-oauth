@@ -1,5 +1,5 @@
 import sys
-sys.path.append('plurk-oauth/')
+sys.path.append('plurk_oauth/')
 from PlurkAPI import PlurkAPI
 import getopt
 import json
