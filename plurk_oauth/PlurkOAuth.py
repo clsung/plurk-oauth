@@ -44,7 +44,7 @@ class PlurkOAuth:
         if self.oauth_token:
             self.token = oauth.Token(self.oauth_token['oauth_token'],
                     self.oauth_token['oauth_token_secret'])
-        req = self.__make_request__(self.baseURL + url, params)
+        req = self._make_request(self.baseURL + url, params)
 
         # Get Request Token
         encodedContent = None
