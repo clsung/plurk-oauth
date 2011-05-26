@@ -7,7 +7,7 @@ class PlurkAPI:
             raise ValueError, "Both CONSUMER_KEY and CONSUMER_SECRET need to be specified"
         self._oauth = PlurkOAuth.PlurkOAuth(key, secret)
         self._authorized = False
-        self._error = {'code' : 200, 'reason' : ''}
+        self._error = {'code' : 200, 'reason' : '', 'content': ''}
         self._content = ''
 
     def authorize(self, access_key = None, access_secret = None):
@@ -19,6 +19,9 @@ class PlurkAPI:
 #            self._oauth.authorize()
         self._error['code'], self._content, self._error['reason'] = self._oauth.request(
                 path, None, options)
+        self._error['content'] = self._content
+        if self._error['code'] != '200':
+            return None
         return json.loads(self._content)
 
     def error(self):
