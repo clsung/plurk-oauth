@@ -20,7 +20,7 @@ Example with API.keys
 ``` python
 from PlurkAPI import PlurkAPI
 
-    plurk = PlurkAPI.fromkeys(<path_to_API.keys>)
+    plurk = PlurkAPI.fromfile(<path_to_API.keys>)
     print plurk.callAPI('/APP/Profile/getOwnProfile')
 ```
 
