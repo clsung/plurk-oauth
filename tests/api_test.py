@@ -4,7 +4,7 @@ from nose.tools import *
 from plurk_oauth.PlurkAPI import PlurkAPI
 import json
 
-class Test0TokenSecret(unittest.TestCase):
+class Test0ConsumerTokenSecret(unittest.TestCase):
     def setUp(self):
         pass
 
@@ -27,6 +27,33 @@ class Test0TokenSecret(unittest.TestCase):
         self.assertEqual(err['reason'], "BAD REQUEST")
         self.assertEqual(err['content']['error_text'],
             "40101:unknown application key")
+
+class Test1AccessTokenSecret(unittest.TestCase):
+    def setUp(self):
+        try: 
+            file = open('API.keys', 'r+')
+        except IOError:
+            print "You need to put key/secret in API.keys"
+            raise
+        except:
+            print "Unexpected error:", sys.exc_info()[0]
+        else:
+            data = json.load(file)
+            file.close()
+            self.plurk = PlurkAPI(data["CONSUMER_KEY"], data["CONSUMER_SECRET"])
+
+    def teardown(self):
+        pass
+
+    def test_invalid_access_key(self):
+        self.plurk.authorize("foor", "bar")
+        r = self.plurk.callAPI('/APP/Profile/getOwnProfile')
+        self.assertIsNone(r)
+        err = self.plurk.error()
+        self.assertEqual(err['code'], "400")
+        self.assertEqual(err['reason'], "BAD REQUEST")
+        self.assertEqual(err['content']['error_text'],
+            "40106:invalid access token")
 
 class TestThreeLeggedAPI(unittest.TestCase):
     def setUp(self):
