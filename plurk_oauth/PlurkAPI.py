@@ -19,10 +19,10 @@ class PlurkAPI:
 #            self._oauth.authorize()
         self._error['code'], self._content, self._error['reason'] = self._oauth.request(
                 path, None, options)
-        self._error['content'] = self._content
+        self._error['content'] = json.loads(self._content)
         if self._error['code'] != '200':
             return None
-        return json.loads(self._content)
+        return self._error['content']
 
     def error(self):
         return self._error

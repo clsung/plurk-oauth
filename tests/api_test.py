@@ -19,12 +19,14 @@ class Test0TokenSecret(unittest.TestCase):
 
     def test_invalid_consumer_key(self):
         self.plurk = PlurkAPI("token", "secret")
-        jdata = self.plurk.callAPI('/APP/Profile/getPublicProfile',
+        r = self.plurk.callAPI('/APP/Profile/getPublicProfile',
                 {'user_id': 'clsung'})
-        self.assertIsInstance(jdata, dict, "Object is a dict")
-        self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
-        self.assertEqual(jdata['user_info']['nick_name'],
-                "clsung", "Author's Name ;)")
+        self.assertIsNone(r)
+        err = self.plurk.error()
+        self.assertEqual(err['code'], "400")
+        self.assertEqual(err['reason'], "BAD REQUEST")
+        self.assertEqual(err['content']['error_text'],
+            "40101:unknown application key")
 
 class TestThreeLeggedAPI(unittest.TestCase):
     def setUp(self):
