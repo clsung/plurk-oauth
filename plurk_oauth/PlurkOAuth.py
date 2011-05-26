@@ -52,10 +52,7 @@ class PlurkOAuth:
             encodedContent = urlencode(data)
         resp, content = client.request(self.baseURL + url, "POST",
                 headers=req.to_header(), body = encodedContent)
-        if resp['status'] != '200':
-            print content
-            raise Exception("Invalid response %s." % resp['status'])
-        return content
+        return resp['status'], content, resp.reason
 
 
     def get_consumer_token(self):
@@ -80,8 +77,6 @@ class PlurkOAuth:
             http_url= requestURL, parameters = param,
             is_form_encoded=True)
         request.sign_request(self.sign_method, self.consumer, self.token)
-        #print request.get_normalized_parameters()
-        #print request.to_header()
         return request
 
     def get_request_token(self):
