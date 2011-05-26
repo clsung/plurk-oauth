@@ -4,6 +4,28 @@ from nose.tools import *
 from plurk_oauth.PlurkAPI import PlurkAPI
 import json
 
+class Test0TokenSecret(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def teardown(self):
+        pass
+
+    def test_no_consumer_key(self):
+        with self.assertRaises(ValueError):
+            self.plurk = PlurkAPI()
+            self.plurk.callAPI('/APP/Profile/getPublicProfile',
+                {'user_id': 'clsung'})
+
+    def test_invalid_consumer_key(self):
+        self.plurk = PlurkAPI("token", "secret")
+        jdata = self.plurk.callAPI('/APP/Profile/getPublicProfile',
+                {'user_id': 'clsung'})
+        self.assertIsInstance(jdata, dict, "Object is a dict")
+        self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
+        self.assertEqual(jdata['user_info']['nick_name'],
+                "clsung", "Author's Name ;)")
+
 class TestThreeLeggedAPI(unittest.TestCase):
     def setUp(self):
         try: 
@@ -26,3 +48,28 @@ class TestThreeLeggedAPI(unittest.TestCase):
         jdata = self.plurk.callAPI('/APP/Profile/getOwnProfile')
         self.assertIsInstance(jdata, dict, "Object is a dict")
         self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
+
+class TestTwoLeggedAPI(unittest.TestCase):
+    def setUp(self):
+        try: 
+            file = open('API.keys', 'r+')
+        except IOError:
+            print "You need to put key/secret in API.keys"
+            raise
+        except:
+            print "Unexpected error:", sys.exc_info()[0]
+        else:
+            data = json.load(file)
+            file.close()
+            self.plurk = PlurkAPI(data["CONSUMER_KEY"], data["CONSUMER_SECRET"])
+
+    def teardown(self):
+        pass
+
+    def test_get_public_profile(self):
+        jdata = self.plurk.callAPI('/APP/Profile/getPublicProfile',
+                {'user_id': 'clsung'})
+        self.assertIsInstance(jdata, dict, "Object is a dict")
+        self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
+        self.assertEqual(jdata['user_info']['nick_name'],
+                "clsung", "Author's Name ;)")
