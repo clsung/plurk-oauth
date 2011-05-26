@@ -57,18 +57,9 @@ class Test1AccessTokenSecret(unittest.TestCase):
 
 class TestThreeLeggedAPI(unittest.TestCase):
     def setUp(self):
-        try: 
-            file = open('API.keys', 'r+')
-        except IOError:
-            print "You need to put key/secret in API.keys"
-            raise
-        except:
-            print "Unexpected error:", sys.exc_info()[0]
-        else:
-            data = json.load(file)
-            file.close()
-            self.plurk = PlurkAPI(data["CONSUMER_KEY"], data["CONSUMER_SECRET"])
-            self.plurk.authorize(data["ACCESS_TOKEN"],data["ACCESS_TOKEN_SECRET"])
+        self.plurk = PlurkAPI.fromfile('API.keys')
+        if not self.plurk.is_authorized:
+            raise KeyError("You need to put cunsomer/access key/secret in API.keys")
 
     def teardown(self):
         pass

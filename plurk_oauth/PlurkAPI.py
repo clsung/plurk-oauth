@@ -1,22 +1,47 @@
+import sys
 import PlurkOAuth
 import json
 
 class PlurkAPI:
-    def __init__(self, key = None, secret = None):
+    def __init__(self, key = None, secret = None,
+            access_token = None, access_secret = None):
         if not key or not secret:
             raise ValueError, "Both CONSUMER_KEY and CONSUMER_SECRET need to be specified"
         self._oauth = PlurkOAuth.PlurkOAuth(key, secret)
         self._authorized = False
         self._error = {'code' : 200, 'reason' : '', 'content': ''}
         self._content = ''
+        if access_token and access_secret:
+            self.authorize(access_token, access_secret)
+
+    @classmethod
+    def fromfile(cls, filename = "API.keys"):
+        try: 
+            file = open(filename, 'r+')
+        except IOError:
+            print "You need to put key/secret in API.keys"
+            raise
+        except:
+            print "Unexpected error:", sys.exc_info()[0]
+        else:
+            data = json.load(file)
+            file.close()
+            if not data["CONSUMER_KEY"] or not data["CONSUMER_SECRET"]:
+                return cls()
+            if data["ACCESS_TOKEN"] and data["ACCESS_TOKEN_SECRET"]:
+                return cls(data["CONSUMER_KEY"], data["CONSUMER_SECRET"],
+                    data["ACCESS_TOKEN"], data["ACCESS_TOKEN_SECRET"])
+            else:
+                return cls(data["CONSUMER_KEY"], data["CONSUMER_SECRET"])
+
+    def is_authorized(self):
+        return self._authorized
 
     def authorize(self, access_key = None, access_secret = None):
         self._oauth.authorize(access_key, access_secret)
         self._authorized = True
 
     def callAPI(self, path, options = None):
-#        if not self._authorized:
-#            self._oauth.authorize()
         self._error['code'], self._content, self._error['reason'] = self._oauth.request(
                 path, None, options)
         self._error['content'] = json.loads(self._content)
