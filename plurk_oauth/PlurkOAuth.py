@@ -40,10 +40,10 @@ class PlurkOAuth:
     def request(self, url, params = None, data = None):
 
         # Setup
-        client = oauth.Client(self.consumer)
         if self.oauth_token:
             self.token = oauth.Token(self.oauth_token['oauth_token'],
                     self.oauth_token['oauth_token_secret'])
+        client = oauth.Client(self.consumer, self.token)
         req = self._make_request(self.baseURL + url, params)
 
         # Get Request Token
