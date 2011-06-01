@@ -66,7 +66,7 @@ class TestThreeLeggedAPI(unittest.TestCase):
 
     def test_get_ownprofile(self):
         jdata = self.plurk.callAPI('/APP/Profile/getOwnProfile')
-        self.assertIsInstance(jdata, dict, "Object is a dict")
+        self.assertIsInstance(jdata, dict, "Object should be a dict")
         self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
 
 class TestTwoLeggedAPI(unittest.TestCase):
