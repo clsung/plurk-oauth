@@ -1,7 +1,6 @@
 import oauth2 as oauth
 import urlparse
 from urllib import urlencode
-import httplib
 
 class PlurkOAuth:
     def __init__(self, customer_key = None, customer_secret = None):
