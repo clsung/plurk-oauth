@@ -83,7 +83,10 @@ class PlurkOAuth:
 
         # Get Token Key/Secret
         content = self.request(self.request_token_url)
-        self.oauth_token = dict(urlparse.parse_qsl(content))
+        if content[0] != '200':
+            # TODO Declare an exception
+            raise Exception(content[2])
+        self.oauth_token = dict(urlparse.parse_qsl(content[1]))
         self._dump(self.oauth_token)
         #print 'Token Key: %s' % str(token['oauth_token'])
         #print 'Token Secret: %s' % str(token['oauth_token_secret'])
@@ -107,8 +110,11 @@ class PlurkOAuth:
             'oauth_token_secret': self.oauth_token['oauth_token_secret'],
             'oauth_verifier': verifier,
             } )
+        if content[0] != '200':
+            # TODO Declare an exception
+            raise Exception(content[2])
         # Get Token Key/Secret
-        self.oauth_token = dict(urlparse.parse_qsl(content))
+        self.oauth_token = dict(urlparse.parse_qsl(content[1]))
         self._dump(self.oauth_token)
         #print 'Access Key: %s' % str(self.oauth_token['oauth_token'])
         #print 'Access Secret: %s' % str(self.oauth_token['oauth_token_secret'])
