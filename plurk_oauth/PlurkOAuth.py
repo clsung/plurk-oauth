@@ -82,7 +82,7 @@ class PlurkOAuth:
 
         # Get Token Key/Secret
         content = self.request(self.request_token_url)
-        if content[0] != '200':
+        if str(content[0]) != '200':
             # TODO Declare an exception
             raise Exception(content[2])
         self.oauth_token = dict(urlparse.parse_qsl(content[1]))
@@ -109,7 +109,7 @@ class PlurkOAuth:
             'oauth_token_secret': self.oauth_token['oauth_token_secret'],
             'oauth_verifier': verifier,
             } )
-        if content[0] != '200':
+        if str(content[0]) != '200':
             # TODO Declare an exception
             raise Exception(content[2])
         # Get Token Key/Secret
