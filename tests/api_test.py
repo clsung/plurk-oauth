@@ -2,7 +2,10 @@ import os
 import unittest
 from nose.tools import *
 from plurk_oauth.PlurkAPI import PlurkAPI
+from plurk_oauth.PlurkOAuth import PlurkOAuth
+import urlparse
 import json
+import mox
 
 class Test0ConsumerTokenSecret(unittest.TestCase):
     def setUp(self):
@@ -93,3 +96,23 @@ class TestTwoLeggedAPI(unittest.TestCase):
         self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
         self.assertEqual(jdata['user_info']['nick_name'],
                 "clsung", "Author's Name ;)")
+
+class TestRequestToken(unittest.TestCase):
+    """
+    http://stackoverflow.com/questions/3145519/mocking-urllib2-urlopen-and-lxml-etree-parse-using-pymox
+    """
+    def setUp(self):
+        """ Create mock oauth object """
+        self.mox = mox.Mox()
+        self.oauth = PlurkOAuth("CONSUMER_KEY", "CONSUMER_SECRET")
+        response = \
+        'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR&oauth_callback_confirmed=true'
+        self.golden_token = dict(urlparse.parse_qsl(response))
+        self.mox.StubOutWithMock(PlurkOAuth, 'request')
+        self.oauth.request(mox.IgnoreArg()).AndReturn(response)
+        self.mox.ReplayAll()
+
+    def testGetRequestToken(self):
+        self.oauth.get_request_token()
+        self.assertEqual(self.golden_token, self.oauth.oauth_token)
+        self.mox.VerifyAll()
