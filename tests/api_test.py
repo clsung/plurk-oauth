@@ -99,20 +99,23 @@ class TestTwoLeggedAPI(unittest.TestCase):
 
 class TestRequestToken(unittest.TestCase):
     """
-    http://stackoverflow.com/questions/3145519/mocking-urllib2-urlopen-and-lxml-etree-parse-using-pymox
+    Unit test for PlurkOAuth.get_request_token
     """
     def setUp(self):
         """ Create mock oauth object """
         self.mox = mox.Mox()
         self.oauth = PlurkOAuth("CONSUMER_KEY", "CONSUMER_SECRET")
-        response = \
+        self.oauth_response = \
         'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR&oauth_callback_confirmed=true'
-        self.golden_token = dict(urlparse.parse_qsl(response))
+        self.golden_token = dict(urlparse.parse_qsl(self.oauth_response))
         self.mox.StubOutWithMock(PlurkOAuth, 'request')
-        self.oauth.request(mox.IgnoreArg()).AndReturn(response)
-        self.mox.ReplayAll()
+
+    def _200_request(self):
+        return 200, self.oauth_response, ""
 
     def testGetRequestToken(self):
+        self.oauth.request(mox.IgnoreArg()).AndReturn(self._200_request())
+        self.mox.ReplayAll()
         self.oauth.get_request_token()
         self.assertEqual(self.golden_token, self.oauth.oauth_token)
         self.mox.VerifyAll()
