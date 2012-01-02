@@ -103,6 +103,10 @@ class PlurkOAuth:
             verified = raw_input('Are you sure? (y/n) ')
         return verifier
 
+    def get_verifier_url(self):
+
+        return '{0}{1}?oauth_token={2}'.format( self.baseURL, self.authorization_url, self.oauth_token['oauth_token'] )
+
     def get_access_token(self, verifier):
 
         content = self.request(self.access_token_url, {
