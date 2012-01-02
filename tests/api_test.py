@@ -110,6 +110,9 @@ class TestRequestToken(unittest.TestCase):
         self.golden_token = dict(urlparse.parse_qsl(self.oauth_response))
         self.mox.StubOutWithMock(PlurkOAuth, 'request')
 
+    def tearDown(self):
+        self.mox.UnsetStubs()
+
     def _200_request(self):
         return 200, self.oauth_response, ""
 
