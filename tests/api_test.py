@@ -122,3 +122,57 @@ class TestRequestToken(unittest.TestCase):
         self.oauth.get_request_token()
         self.assertEqual(self.golden_token, self.oauth.oauth_token)
         self.mox.VerifyAll()
+
+class TestAPIAuth(unittest.TestCase):
+    '''
+    Unit test for PlurkAPI auth part
+    '''
+    def setUp(self):
+        self.mox = mox.Mox()
+        self.api = PlurkAPI('CONSUMER_KEY', 'CONSUMER_SECRET')
+        self.oauth_response = \
+        'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR&oauth_callback_confirmed=true'
+        self.verify_response = \
+        'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR'
+        self.golden_token = {
+		'key': 'ReqXBFOswcyR',
+		'secret': 'O7WqqqWHA61f4ZE5izQdTQmK',
+	}
+        self.golden_url = 'http://www.plurk.com/OAuth/authorize?oauth_token=ReqXBFOswcyR'
+        self.mox.StubOutWithMock(PlurkOAuth, 'request')
+
+    def tearDown(self):
+        self.mox.UnsetStubs()
+
+    def _200_request(self):
+        return 200, self.oauth_response, ""
+
+    def _200_verify(self):
+        return 200, self.verify_response, ''
+
+    def testSetRequestToken(self):
+        self.api.set_request_token('ReqXBFOswcyR', 'O7WqqqWHA61f4ZE5izQdTQmK')
+        token = self.api.get_request_token()
+        self.assertEqual(self.golden_token, token)
+        self.mox.VerifyAll()
+
+    def testGetRequestToken(self):
+        self.api._oauth.request(mox.IgnoreArg()).AndReturn(self._200_request())
+        self.mox.ReplayAll()
+        token = self.api.get_request_token()
+        self.assertEqual(self.golden_token, token)
+        self.mox.VerifyAll()
+
+    def testGetVerifierURL(self):
+        self.api.set_request_token('ReqXBFOswcyR', 'O7WqqqWHA61f4ZE5izQdTQmK')
+        url = self.api.get_verifier_url()
+        self.assertEqual(self.golden_url, url)
+        self.mox.VerifyAll()
+
+    def testGetAccessToken(self):
+        self.api._oauth.request(mox.IgnoreArg(), mox.IgnoreArg()).AndReturn(self._200_verify())
+        self.mox.ReplayAll()
+        self.api.set_request_token('ReqXBFOswcyR', 'O7WqqqWHA61f4ZE5izQdTQmK')
+        token = self.api.get_access_token('VERIFIER')
+        self.assertEqual(self.golden_token, token)
+        self.mox.VerifyAll()
