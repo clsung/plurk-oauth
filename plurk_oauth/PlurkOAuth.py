@@ -105,6 +105,9 @@ class PlurkOAuth:
 
     def get_verifier_url(self):
 
+        if not self.oauth_token or 'oauth_token' not in self.oauth_token:
+            # TODO Declare an exception
+            raise Exception('Please request a token first')
         return '{0}{1}?oauth_token={2}'.format( self.baseURL, self.authorization_url, self.oauth_token['oauth_token'] )
 
     def get_access_token(self, verifier):
