@@ -78,7 +78,15 @@ class PlurkOAuth:
         request.sign_request(self.sign_method, self.consumer, self.token)
         return request
 
+    def _has_pending_oauth_token(self):
+        # TODO we dont know this is request or access token, may ambiguous
+        return self.oauth_token and 'oauth_token' in self.oauth_token and 'oauth_token_secret' in self.oauth_token
+
     def get_request_token(self):
+
+        if self._has_pending_oauth_token():
+            # Already has a request/access token
+            return
 
         # Get Token Key/Secret
         content = self.request(self.request_token_url)
