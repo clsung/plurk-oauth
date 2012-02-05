@@ -135,9 +135,9 @@ class TestAPIAuth(unittest.TestCase):
         self.verify_response = \
         'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR'
         self.golden_token = {
-		'key': 'ReqXBFOswcyR',
-		'secret': 'O7WqqqWHA61f4ZE5izQdTQmK',
-	}
+                'key': 'ReqXBFOswcyR',
+                'secret': 'O7WqqqWHA61f4ZE5izQdTQmK',
+        }
         self.golden_url = 'http://www.plurk.com/OAuth/authorize?oauth_token=ReqXBFOswcyR'
         self.mox.StubOutWithMock(PlurkOAuth, 'request')
 
