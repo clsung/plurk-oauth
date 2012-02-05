@@ -78,7 +78,15 @@ class PlurkOAuth:
         request.sign_request(self.sign_method, self.consumer, self.token)
         return request
 
+    def _has_pending_oauth_token(self):
+        # TODO we dont know this is request or access token, may ambiguous
+        return self.oauth_token and 'oauth_token' in self.oauth_token and 'oauth_token_secret' in self.oauth_token
+
     def get_request_token(self):
+
+        if self._has_pending_oauth_token():
+            # Already has a request/access token
+            return
 
         # Get Token Key/Secret
         content = self.request(self.request_token_url)
@@ -102,6 +110,13 @@ class PlurkOAuth:
             verifier = raw_input('Input the verification number: ')
             verified = raw_input('Are you sure? (y/n) ')
         return verifier
+
+    def get_verifier_url(self):
+
+        if not self.oauth_token or 'oauth_token' not in self.oauth_token:
+            # TODO Declare an exception
+            raise Exception('Please request a token first')
+        return '{0}{1}?oauth_token={2}'.format( self.baseURL, self.authorization_url, self.oauth_token['oauth_token'] )
 
     def get_access_token(self, verifier):
 

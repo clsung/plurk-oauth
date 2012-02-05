@@ -52,6 +52,27 @@ class PlurkAPI:
     def error(self):
         return self._error
 
+    def get_request_token(self):
+        self._oauth.get_request_token()
+        return {
+            'key': self._oauth.oauth_token['oauth_token'],
+            'secret': self._oauth.oauth_token['oauth_token_secret'],
+        }
+
+    def set_request_token(self, request_key, request_secret):
+        self._oauth.oauth_token['oauth_token'] = request_key
+        self._oauth.oauth_token['oauth_token_secret'] = request_secret
+
+    def get_verifier_url(self):
+        return self._oauth.get_verifier_url()
+
+    def get_access_token(self, verifier):
+        self._oauth.get_access_token(verifier)
+        return {
+            'key': self._oauth.oauth_token['oauth_token'],
+            'secret': self._oauth.oauth_token['oauth_token_secret'],
+        }
+
 
 if __name__ == '__main__':
     import os
