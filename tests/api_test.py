@@ -116,7 +116,7 @@ class TestRequestToken(unittest.TestCase):
     def _200_request(self):
         return 200, self.oauth_response, ""
 
-    def testGetRequestToken(self):
+    def test_get_request_token(self):
         self.oauth.request(mox.IgnoreArg()).AndReturn(self._200_request())
         self.mox.ReplayAll()
         self.oauth.get_request_token()
@@ -150,26 +150,26 @@ class TestAPIAuth(unittest.TestCase):
     def _200_verify(self):
         return 200, self.verify_response, ''
 
-    def testSetRequestToken(self):
+    def test_set_request_token(self):
         self.api.set_request_token('ReqXBFOswcyR', 'O7WqqqWHA61f4ZE5izQdTQmK')
         token = self.api.get_request_token()
         self.assertEqual(self.golden_token, token)
         self.mox.VerifyAll()
 
-    def testGetRequestToken(self):
+    def test_get_request_token(self):
         self.api._oauth.request(mox.IgnoreArg()).AndReturn(self._200_request())
         self.mox.ReplayAll()
         token = self.api.get_request_token()
         self.assertEqual(self.golden_token, token)
         self.mox.VerifyAll()
 
-    def testGetVerifierURL(self):
+    def test_get_verifier_url(self):
         self.api.set_request_token('ReqXBFOswcyR', 'O7WqqqWHA61f4ZE5izQdTQmK')
         url = self.api.get_verifier_url()
         self.assertEqual(self.golden_url, url)
         self.mox.VerifyAll()
 
-    def testGetAccessToken(self):
+    def test_get_access_token(self):
         self.api._oauth.request(mox.IgnoreArg(), mox.IgnoreArg()).AndReturn(self._200_verify())
         self.mox.ReplayAll()
         self.api.set_request_token('ReqXBFOswcyR', 'O7WqqqWHA61f4ZE5izQdTQmK')
