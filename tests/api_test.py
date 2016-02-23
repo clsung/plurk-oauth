@@ -1,11 +1,17 @@
-import os
-import unittest
-from nose.tools import *
-from plurk_oauth.PlurkAPI import PlurkAPI
-from plurk_oauth.PlurkOAuth import PlurkOAuth
-import urlparse
+# -*- coding: utf-8 -*-
 import json
-import mox
+import unittest
+# compatible python3
+import sys
+if sys.version_info >= (3, 0, 0):
+    from mox3 import mox
+    from urllib.parse import parse_qsl
+else:
+    import mox
+    from urlparse import parse_qsl
+
+from plurk_oauth import PlurkAPI, PlurkOAuth
+
 
 class Test0ConsumerTokenSecret(unittest.TestCase):
     def setUp(self):
@@ -18,28 +24,29 @@ class Test0ConsumerTokenSecret(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.plurk = PlurkAPI()
             self.plurk.callAPI('/APP/Profile/getPublicProfile',
-                {'user_id': 'clsung'})
+                               {'user_id': 'clsung'})
 
     def test_invalid_consumer_key(self):
         self.plurk = PlurkAPI("token", "secret")
         r = self.plurk.callAPI('/APP/Profile/getPublicProfile',
-                {'user_id': 'clsung'})
+                               {'user_id': 'clsung'})
         self.assertIsNone(r)
         err = self.plurk.error()
         self.assertEqual(err['code'], "400")
         self.assertEqual(err['reason'], "BAD REQUEST")
         self.assertEqual(err['content']['error_text'],
-            "40101:unknown application key")
+                         "40101:unknown application key")
+
 
 class Test1AccessTokenSecret(unittest.TestCase):
     def setUp(self):
-        try: 
+        try:
             file = open('API.keys', 'r+')
         except IOError:
-            print "You need to put key/secret in API.keys"
+            print("You need to put key/secret in API.keys")
             raise
         except:
-            print "Unexpected error:", sys.exc_info()[0]
+            print("Unexpected error:", sys.exc_info()[0])
         else:
             data = json.load(file)
             file.close()
@@ -56,7 +63,8 @@ class Test1AccessTokenSecret(unittest.TestCase):
         self.assertEqual(err['code'], "400")
         self.assertEqual(err['reason'], "BAD REQUEST")
         self.assertEqual(err['content']['error_text'],
-            "40106:invalid access token")
+                         "40106:invalid access token")
+
 
 class TestThreeLeggedAPI(unittest.TestCase):
     def setUp(self):
@@ -72,15 +80,16 @@ class TestThreeLeggedAPI(unittest.TestCase):
         self.assertIsInstance(jdata, dict, "Object should be a dict")
         self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
 
+
 class TestTwoLeggedAPI(unittest.TestCase):
     def setUp(self):
-        try: 
+        try:
             file = open('API.keys', 'r+')
         except IOError:
-            print "You need to put key/secret in API.keys"
+            print("You need to put key/secret in API.keys")
             raise
         except:
-            print "Unexpected error:", sys.exc_info()[0]
+            print("Unexpected error:", sys.exc_info()[0])
         else:
             data = json.load(file)
             file.close()
@@ -91,11 +100,12 @@ class TestTwoLeggedAPI(unittest.TestCase):
 
     def test_get_public_profile(self):
         jdata = self.plurk.callAPI('/APP/Profile/getPublicProfile',
-                {'user_id': 'clsung'})
+                                   {'user_id': 'clsung'})
         self.assertIsInstance(jdata, dict, "Object is a dict")
         self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
         self.assertEqual(jdata['user_info']['nick_name'],
-                "clsung", "Author's Name ;)")
+                         "clsung", "Author's Name ;)")
+
 
 class TestRequestToken(unittest.TestCase):
     """
@@ -106,8 +116,8 @@ class TestRequestToken(unittest.TestCase):
         self.mox = mox.Mox()
         self.oauth = PlurkOAuth("CONSUMER_KEY", "CONSUMER_SECRET")
         self.oauth_response = \
-        'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR&oauth_callback_confirmed=true'
-        self.golden_token = dict(urlparse.parse_qsl(self.oauth_response))
+            'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR&oauth_callback_confirmed=true'  # NOQA
+        self.golden_token = dict(parse_qsl(self.oauth_response))
         self.mox.StubOutWithMock(PlurkOAuth, 'request')
 
     def tearDown(self):
@@ -123,6 +133,7 @@ class TestRequestToken(unittest.TestCase):
         self.assertEqual(self.golden_token, self.oauth.oauth_token)
         self.mox.VerifyAll()
 
+
 class TestAPIAuth(unittest.TestCase):
     '''
     Unit test for PlurkAPI auth part
@@ -131,12 +142,12 @@ class TestAPIAuth(unittest.TestCase):
         self.mox = mox.Mox()
         self.api = PlurkAPI('CONSUMER_KEY', 'CONSUMER_SECRET')
         self.oauth_response = \
-        'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR&oauth_callback_confirmed=true'
+            'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR&oauth_callback_confirmed=true'  # NOQA
         self.verify_response = \
-        'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR'
+            'oauth_token_secret=O7WqqqWHA61f4ZE5izQdTQmK&oauth_token=ReqXBFOswcyR'
         self.golden_token = {
-                'key': 'ReqXBFOswcyR',
-                'secret': 'O7WqqqWHA61f4ZE5izQdTQmK',
+            'key': 'ReqXBFOswcyR',
+            'secret': 'O7WqqqWHA61f4ZE5izQdTQmK',
         }
         self.golden_url = 'http://www.plurk.com/OAuth/authorize?oauth_token=ReqXBFOswcyR'
         self.mox.StubOutWithMock(PlurkOAuth, 'request')

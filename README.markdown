@@ -8,6 +8,20 @@ About
 Plurk-OAuth is a wrapper for [Plurk API 2.0 beta](http://www.plurk.com/API/2)
 You will need to [Sign Up](http://www.plurk.com/PlurkApp/register) for your own CUSTOMER TOKENs.
 
+Installation
+----
+simply:
+```
+    $ pip install plurk-oauth
+```
+
+for development:
+```
+    $ git clone git@github.com:clsung/plurk-oauth.git
+    $ cd plurk-oauth
+    $ pip install -e .
+```
+
 API.keys
 ----
 You will need to save CONSUMER_KEY/CONSUMER_SECRET in API.keys, the
@@ -18,31 +32,31 @@ format is JSON. The example is below:
 Example with API.keys
 ----
 ``` python
-from PlurkAPI import PlurkAPI
+from plurk_oauth import PlurkAPI
 
     plurk = PlurkAPI.fromfile(<path_to_API.keys>)
-    print plurk.callAPI('/APP/Profile/getOwnProfile')
+    print(plurk.callAPI('/APP/Profile/getOwnProfile'))
 ```
 
 Example with ACCESS_TOKEN
 ----
 ``` python
-from PlurkAPI import PlurkAPI
+from plurk_oauth import PlurkAPI
 
     plurk = PlurkAPI(CONSUMER_KEY, CONSUMER_SECRET)
     plurk.authorize(ACCESS_TOKEN,ACCESS_TOKEN_SECRET)
-    print plurk.callAPI('/APP/Profile/getOwnProfile')
+    print(plurk.callAPI('/APP/Profile/getOwnProfile'))
 ```
 
 
 Example without ACCESS_TOKEN
 ----
 ``` python
-from PlurkAPI import PlurkAPI
+from plurk_oauth import PlurkAPI
 
     plurk = PlurkAPI(CONSUMER_KEY, CONSUMER_SECRET)
     plurk.authorize()
-    print plurk.callAPI('/APP/Profile/getOwnProfile')
+    print(plurk.callAPI('/APP/Profile/getOwnProfile'))
 ```
 
 
