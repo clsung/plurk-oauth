@@ -110,7 +110,6 @@ class PlurkOAuth:
 
         # Get Token Key/Secret
         status, content, reason = self.request(self.request_token_url)
-        print(status, content, reason)
         if str(status) != '200':
             # TODO Declare an exception
             raise Exception(reason)
