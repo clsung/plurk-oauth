@@ -8,3 +8,4 @@ plurk-oauth is written and maintained by:
 ### Patches and Suggestions
 ------------
 - Wei-Cheng Pan <legnaleurc@gmail.com>
+- Tatsuji Tsuchiya <ta2xeo@gmail.com>
