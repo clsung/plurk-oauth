@@ -17,7 +17,7 @@ else:
 
 class PlurkOAuth:
     def __init__(self, customer_key=None, customer_secret=None):
-        self.base_url = 'http://www.plurk.com'
+        self.base_url = 'https://www.plurk.com'
         self.request_token_url = '/OAuth/request_token'
         self.authorization_url = '/OAuth/authorize'
         self.access_token_url = '/OAuth/access_token'
