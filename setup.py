@@ -10,7 +10,7 @@ config = {
     'download_url': 'http://pypi.python.org/pypi/plurk-oauth',
     'author_email': 'clsung@gmail.com',
     'version': '0.6.0',
-    'install_requires': ['nose', 'oauth2'],
+    'install_requires': ['nose', 'oauth2', 'poster'],
     'packages': ['plurk_oauth'],
     'scripts': ['bin/get_own_profile.py', 'bin/post_to_plurk.py'],
     'name': 'plurk-oauth'
