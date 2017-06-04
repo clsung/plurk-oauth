@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 import json
 from .oauth import PlurkOAuth
