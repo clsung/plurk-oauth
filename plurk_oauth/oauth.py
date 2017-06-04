@@ -3,6 +3,10 @@ from oauth2 import (
     Client, Consumer, Request,
     SignatureMethod_HMAC_SHA1, Token,
 )
+import urlparse
+from poster.encode import multipart_encode
+from poster.streaminghttp import register_openers
+import urllib2
 
 # compatible python3
 import sys
@@ -14,6 +18,8 @@ else:
     from urllib import urlencode
     input = raw_input
 
+# register the streaming http handlers with urllib2
+register_openers()
 
 class PlurkOAuth:
     def __init__(self, customer_key=None, customer_secret=None):
@@ -49,7 +55,7 @@ class PlurkOAuth:
             verifier = self.get_verifier()
             self.get_access_token(verifier)
 
-    def request(self, url, params=None, data=None):
+    def request(self, url, params=None, data=None, fpath=None):
 
         # Setup
         if self.oauth_token:
@@ -57,6 +63,30 @@ class PlurkOAuth:
                                self.oauth_token['oauth_token_secret'])
         client = Client(self.consumer, self.token)
         req = self._make_request(self.base_url + url, params)
+
+        if fpath:
+            # convert request back to post data
+            compiled_postdata = req.to_postdata()
+            all_upload_params = urlparse.parse_qs(compiled_postdata, keep_blank_values=True)
+
+            # parse_qs returns values as arrays, convert back to strings
+            for key, val in all_upload_params.iteritems():
+                all_upload_params[key] = val[0]
+
+            # hardcoded parameter name for /APP/Timeline/uploadPicture only
+            all_upload_params['image'] = open(fpath, 'rb')
+
+            datagen, headers = multipart_encode(all_upload_params)
+            request = urllib2.Request(self.base_url + url, datagen, headers)
+
+            try:
+                respdata = urllib2.urlopen(request).read()
+            except urllib2.HTTPError, ex:
+                print >> sys.stderr, 'Received error code: ', ex.code
+                print >> sys.stderr
+                print >> sys.stderr, ex
+                sys.exit(1)
+            return '200', respdata, 'OK'
 
         # Get Request Token
         encoded_content = None
