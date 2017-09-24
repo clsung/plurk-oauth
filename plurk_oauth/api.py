@@ -30,7 +30,8 @@ class PlurkAPI:
             file.close()
             if not data["CONSUMER_KEY"] or not data["CONSUMER_SECRET"]:
                 return cls()
-            if data["ACCESS_TOKEN"] and data["ACCESS_TOKEN_SECRET"]:
+            if data.get("ACCESS_TOKEN", None) and \
+               data.get("ACCESS_TOKEN_SECRET", None):
                 return cls(data["CONSUMER_KEY"], data["CONSUMER_SECRET"],
                            data["ACCESS_TOKEN"], data["ACCESS_TOKEN_SECRET"])
             else:

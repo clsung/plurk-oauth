@@ -11,4 +11,4 @@ install:
   - travis_retry pip install coverage
   - pip install -r req.txt
 
-script: nosetests --verbosity=2 --with-coverage --cover-erase --cover-package=gdapi
+script: nosetests --verbosity=2 --with-coverage --cover-erase

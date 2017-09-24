@@ -69,7 +69,7 @@ class Test1AccessTokenSecret(unittest.TestCase):
 class TestThreeLeggedAPI(unittest.TestCase):
     def setUp(self):
         self.plurk = PlurkAPI.fromfile('API.keys')
-        if not self.plurk.is_authorized:
+        if not self.plurk.is_authorized():
             raise KeyError("You need to put cunsomer/access key/secret in API.keys")
 
     def teardown(self):
@@ -149,7 +149,7 @@ class TestAPIAuth(unittest.TestCase):
             'key': 'ReqXBFOswcyR',
             'secret': 'O7WqqqWHA61f4ZE5izQdTQmK',
         }
-        self.golden_url = 'http://www.plurk.com/OAuth/authorize?oauth_token=ReqXBFOswcyR'
+        self.golden_url = 'https://www.plurk.com/OAuth/authorize?oauth_token=ReqXBFOswcyR'
         self.mox.StubOutWithMock(PlurkOAuth, 'request')
 
     def tearDown(self):
