@@ -93,7 +93,7 @@ class PlurkOAuth:
         if data:
             encoded_content = urlencode(data)
         resp, content = client.request(self.base_url + url, "POST",
-                                       headers=req.to_header(), body=encoded_content)
+                                       body=encoded_content)
         # for python3
         if isinstance(content, bytes):
             content = content.decode('utf-8')
