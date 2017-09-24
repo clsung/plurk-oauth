@@ -62,7 +62,7 @@ class PlurkOAuth:
             self.token = Token(self.oauth_token['oauth_token'],
                                self.oauth_token['oauth_token_secret'])
         client = Client(self.consumer, self.token)
-        req = self._make_request(self.base_url + url, params)
+        req = self._make_request(self.base_url + url, data)
 
         if fpath:
             # convert request back to post data
