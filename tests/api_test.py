@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import json
 import unittest
 # compatible python3
@@ -40,22 +41,13 @@ class Test0ConsumerTokenSecret(unittest.TestCase):
 
 class Test1AccessTokenSecret(unittest.TestCase):
     def setUp(self):
-        try:
-            file = open('API.keys', 'r+')
-        except IOError:
-            print("You need to put key/secret in API.keys")
-            raise
-        except:
-            print("Unexpected error:", sys.exc_info()[0])
-        else:
-            data = json.load(file)
-            file.close()
-            self.plurk = PlurkAPI(data["CONSUMER_KEY"], data["CONSUMER_SECRET"])
+        pass
 
     def teardown(self):
         pass
 
     def test_invalid_access_key(self):
+        self.plurk = PlurkAPI("key", "secret")
         self.plurk.authorize("foor", "bar")
         r = self.plurk.callAPI('/APP/Profile/getOwnProfile')
         self.assertIsNone(r)
@@ -66,6 +58,7 @@ class Test1AccessTokenSecret(unittest.TestCase):
                          "40106:invalid access token")
 
 
+@unittest.skipUnless(os.path.isfile("API.keys"), "requires API.keys")
 class TestThreeLeggedAPI(unittest.TestCase):
     def setUp(self):
         self.plurk = PlurkAPI.fromfile('API.keys')
@@ -81,6 +74,7 @@ class TestThreeLeggedAPI(unittest.TestCase):
         self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
 
 
+@unittest.skipUnless(os.path.isfile("API.keys"), "requires API.keys")
 class TestTwoLeggedAPI(unittest.TestCase):
     def setUp(self):
         try:
