@@ -4,7 +4,6 @@ from oauth2 import (
     SignatureMethod_HMAC_SHA1, Token,
 )
 import requests
-import urllib2
 
 # compatible python3
 import sys
