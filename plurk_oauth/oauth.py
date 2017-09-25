@@ -3,7 +3,6 @@ from oauth2 import (
     Client, Consumer, Request,
     SignatureMethod_HMAC_SHA1, Token,
 )
-import urlparse
 import requests
 import urllib2
 
