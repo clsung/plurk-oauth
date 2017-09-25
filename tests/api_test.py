@@ -33,7 +33,7 @@ class Test0ConsumerTokenSecret(unittest.TestCase):
                                {'user_id': 'clsung'})
         self.assertIsNone(r)
         err = self.plurk.error()
-        self.assertEqual(err['code'], "400")
+        self.assertEqual(err['code'], 400)
         self.assertEqual(err['reason'], "BAD REQUEST")
         self.assertEqual(err['content']['error_text'],
                          "40101:unknown application key")
@@ -52,7 +52,7 @@ class Test1AccessTokenSecret(unittest.TestCase):
         r = self.plurk.callAPI('/APP/Profile/getOwnProfile')
         self.assertIsNone(r)
         err = self.plurk.error()
-        self.assertEqual(err['code'], "400")
+        self.assertEqual(err['code'], 400)
         self.assertEqual(err['reason'], "BAD REQUEST")
         self.assertEqual(err['content']['error_text'],
                          "40106:invalid access token")
@@ -72,6 +72,13 @@ class TestThreeLeggedAPI(unittest.TestCase):
         jdata = self.plurk.callAPI('/APP/Profile/getOwnProfile')
         self.assertIsInstance(jdata, dict, "Object should be a dict")
         self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
+
+    def test_upload_lenna(self):
+        jdata = self.plurk.callAPI('/APP/Timeline/uploadPicture',
+                                   fpath="tests/lenna.jpg")
+        self.assertIsInstance(jdata, dict, "Object should be a dict")
+        self.assertTrue("full" in jdata, "have key 'full'")
+        self.assertTrue("thumbnail" in jdata, "have key 'thumbnail'")
 
 
 @unittest.skipUnless(os.path.isfile("API.keys"), "requires API.keys")
@@ -95,7 +102,7 @@ class TestTwoLeggedAPI(unittest.TestCase):
     def test_get_public_profile(self):
         jdata = self.plurk.callAPI('/APP/Profile/getPublicProfile',
                                    {'user_id': 'clsung'})
-        self.assertIsInstance(jdata, dict, "Object is a dict")
+        self.assertIsInstance(jdata, dict, "Object should be a dict")
         self.assertGreater(jdata['user_info']['uid'], 0, "Self Uid > 0")
         self.assertEqual(jdata['user_info']['nick_name'],
                          "clsung", "Author's Name ;)")

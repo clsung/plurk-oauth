@@ -12,7 +12,7 @@ class PlurkAPI:
         self._oauth = PlurkOAuth(key, secret)
         self._authorized = False
         self._error = {'code': 200, 'reason': '', 'content': ''}
-        self._content = ''
+        self._content = {}
         if access_token and access_secret:
             self.authorize(access_token, access_secret)
 
@@ -44,11 +44,11 @@ class PlurkAPI:
         self._oauth.authorize(access_key, access_secret)
         self._authorized = True
 
-    def callAPI(self, path, options=None, fpath=None):
-        self._error['code'], self._content, self._error['reason'] = self._oauth.request(
+    def callAPI(self, path, options={}, fpath=None):
+        self._error['code'], self._json, self._error['reason'] = self._oauth.request(
             path, None, options, fpath)
-        self._error['content'] = json.loads(self._content)
-        if self._error['code'] != '200':
+        self._error['content'] = self._json
+        if self._error['code'] != 200:
             return None
         return self._error['content']
 
