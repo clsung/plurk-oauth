@@ -1,0 +1,15 @@
+language: python
+python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
+install:
+  - if [[ $TRAVIS_PYTHON_VERSION == 2* ]]; then travis_retry pip install mox; fi
+  - if [[ $TRAVIS_PYTHON_VERSION == 3* ]]; then travis_retry pip install mox3; fi
+  - travis_retry pip install coverage
+  - pip install -r req.txt
+
+script: nosetests --verbosity=2 --with-coverage --cover-erase
