@@ -32,7 +32,7 @@ format is JSON. The example is below:
 Example with API.keys
 ----
 ``` python
-from plurk_oauth import PlurkAPI
+    from plurk_oauth import PlurkAPI
 
     plurk = PlurkAPI.fromfile(<path_to_API.keys>)
     print(plurk.callAPI('/APP/Profile/getOwnProfile'))
@@ -41,18 +41,23 @@ from plurk_oauth import PlurkAPI
 Example with ACCESS_TOKEN
 ----
 ``` python
-from plurk_oauth import PlurkAPI
+    from plurk_oauth import PlurkAPI
 
     plurk = PlurkAPI(CONSUMER_KEY, CONSUMER_SECRET)
     plurk.authorize(ACCESS_TOKEN,ACCESS_TOKEN_SECRET)
+
     print(plurk.callAPI('/APP/Profile/getOwnProfile'))
+
+    print(plurk.callAPI('/APP/Profile/getPublicProfile', options={'user_id': 4203050}))
+
+    print(plurk.callAPI('/APP/Timeline/uploadPicture', files={'image': '../testimg.jpg'}))
 ```
 
 
 Example without ACCESS_TOKEN
 ----
 ``` python
-from plurk_oauth import PlurkAPI
+    from plurk_oauth import PlurkAPI
 
     plurk = PlurkAPI(CONSUMER_KEY, CONSUMER_SECRET)
     plurk.authorize()

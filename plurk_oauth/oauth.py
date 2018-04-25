@@ -50,7 +50,7 @@ class PlurkOAuth:
             verifier = self.get_verifier()
             self.get_access_token(verifier)
 
-    def request(self, url, params={}, data={}, fpath=None):
+    def request(self, url, params={}, data={}, files={}):
         """ Return: status code, json object, status reason """
 
         # Setup
@@ -59,27 +59,26 @@ class PlurkOAuth:
                                self.oauth_token['oauth_token_secret'])
         req = self._make_request(self.base_url + url, data)
 
-        if fpath:
-            try:
-                with open(fpath, 'rb') as f:
-                    # hardcoded parameter name for /APP/Timeline/uploadPicture only
-                    r = requests.post(
-                        self.base_url + url,
-                        headers=req.to_header(),
-                        files={'image': f},
-                    )
-                    r.raise_for_status()
-            except requests.RequestException as ex:
-                print >> sys.stderr, ex
-                sys.exit(1)
-            return r.status_code, r.json(), r.reason
-
-        # Get Request Token
-        r = requests.post(
-            self.base_url + url,
-            headers=req.to_header(),
-            data=data,
-        )
+        req_files = {}
+        try:
+            if files:
+                for (name, fpath) in files.items():
+                    req_files[name] = open(fpath, 'rb')
+            r = requests.post(
+                self.base_url + url,
+                headers=req.to_header(),
+                data=data,
+                files=req_files if req_files else None
+            )
+        except requests.RequestException as ex:
+            print >> sys.stderr, ex
+            sys.exit(1)
+        except:
+            print >> sys.stderr
+            sys.exit(1)
+        finally:
+            for name, ofile in req_files.items():
+                 ofile.close()
 
         return r.status_code, r.json(), r.reason
 
