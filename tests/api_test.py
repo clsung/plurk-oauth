@@ -75,7 +75,7 @@ class TestThreeLeggedAPI(unittest.TestCase):
 
     def test_upload_lenna(self):
         jdata = self.plurk.callAPI('/APP/Timeline/uploadPicture',
-                                   fpath="tests/lenna.jpg")
+                                   files={"image":"tests/lenna.jpg"})
         self.assertIsInstance(jdata, dict, "Object should be a dict")
         self.assertTrue("full" in jdata, "have key 'full'")
         self.assertTrue("thumbnail" in jdata, "have key 'thumbnail'")
