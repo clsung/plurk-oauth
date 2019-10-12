@@ -8,7 +8,7 @@ import requests
 # compatible python3
 import sys
 if sys.version_info >= (3, 0, 0):
-    from urllib.parse import parse_qsl
+    from urllib.parse import parse_qsl, parse_qs
     from urllib.parse import urlencode
 else:
     from urlparse import parse_qsl
@@ -64,12 +64,14 @@ class PlurkOAuth:
             if files:
                 for (name, fpath) in files.items():
                     req_files[name] = open(fpath, 'rb')
+
             r = requests.post(
                 self.base_url + url,
                 headers=req.to_header(),
                 data=data,
                 files=req_files if req_files else None
             )
+
         except requests.RequestException as ex:
             print >> sys.stderr, ex
             sys.exit(1)
@@ -80,7 +82,12 @@ class PlurkOAuth:
             for name, ofile in req_files.items():
                  ofile.close()
 
-        return r.status_code, r.json(), r.reason
+        #print(r.text)
+
+        try:
+            return r.status_code, r.json(), r.reason
+        except:
+            return r.status_code, r.text, r.reason
 
     def get_consumer_token(self):
 
@@ -154,7 +161,7 @@ class PlurkOAuth:
 
     def get_access_token(self, verifier):
 
-        status, content, reason = self.request(self.access_token_url, {
+        status, content, reason = self.request(self.access_token_url, data={
             'oauth_token_secret': self.oauth_token['oauth_token_secret'],
             'oauth_verifier': verifier,
         })
